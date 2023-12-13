@@ -25,6 +25,31 @@ CHOICES_TEST_7 = {
     1: "More than 3 hazardous pictograms with indication warning or at least 1 hazardous pictogram with indication danger",
 }
 
+# APP HIDE MENU
+# st.markdown('''
+# <style>
+# .stApp [data-testid="stToolbar"]{
+#     display:none;
+# }
+# </style>
+# ''', unsafe_allow_html=True)
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
+# hide_streamlit_style = """
+# <style>
+# #MainMenu {visibility: hidden;}
+# footer {visibility: hidden;}
+# </style>
+
+# """
+# st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
 # APP LAYOUT CONFIG
 st.title("Green Analytical Chemistry")
