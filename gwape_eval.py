@@ -26,30 +26,14 @@ CHOICES_TEST_7 = {
 }
 
 # APP HIDE MENU
-# st.markdown('''
-# <style>
-# .stApp [data-testid="stToolbar"]{
-#     display:none;
-# }
-# </style>
-# ''', unsafe_allow_html=True)
-hide_st_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_st_style, unsafe_allow_html=True)
-
-# hide_streamlit_style = """
-# <style>
-# #MainMenu {visibility: hidden;}
-# footer {visibility: hidden;}
-# </style>
-
-# """
-# st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+# hide_st_style = """
+#             <style>
+#             #MainMenu {visibility: hidden;}
+#             footer {visibility: hidden;}
+#             header {visibility: hidden;}
+#             </style>
+#             """
+# st.markdown(hide_st_style, unsafe_allow_html=True)
 
 # APP LAYOUT CONFIG
 st.title("Green Analytical Chemistry")

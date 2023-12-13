@@ -1,0 +1,107 @@
+[global]
+
+# ***DEPRECATED***
+# global.disableWatchdogWarning has been deprecated has been deprecated and
+# will be removed in a future version. This option will be removed on or after
+# 2024-01-20.
+# ****************
+# By default, Streamlit checks if the Python watchdog module is available
+# and, if not, prints a warning asking for you to install it. The watchdog
+# module is not required, but highly recommended. It improves Streamlit's
+# ability to detect changes to files in your filesystem.
+# If you'd like to turn off this warning, set this to True.
+# Default: false
+disableWatchdogWarning = false
+
+# By default, Streamlit displays a warning when a user sets both a widget
+# default value in the function defining the widget and a widget value via
+# the widget's key in `st.session_state`.
+# If you'd like to turn off this warning, set this to True.
+# Default: false
+disableWidgetStateDuplicationWarning = false
+
+# If True, will show a warning when you run a Streamlit-enabled script
+# via "python my_script.py".
+# Default: true
+showWarningOnDirectExecution = true
+
+[logger]
+
+# Level of logging: 'error', 'warning', 'info', or 'debug'.
+# Default: 'info'
+level = "info"
+
+# String format for logging messages. If logger.datetimeFormat is set,
+# logger messages will default to `%(asctime)s.%(msecs)03d %(message)s`. See
+# Python's documentation for available attributes:
+# https://docs.python.org/2.6/library/logging.html#formatter-objects
+# Default: "%(asctime)s %(message)s"
+messageFormat = "%(asctime)s %(message)s"
+
+[client]
+
+# ***DEPRECATED***
+# client.caching has been deprecated and is not required anymore for our new
+# caching commands. This option will be removed on or after 2024-01-20.
+# ****************
+# Whether to enable st.cache. This does not affect st.cache_data or
+# st.cache_resource.
+# Default: true
+caching = true
+
+# ***DEPRECATED***
+# client.displayEnabled has been deprecated and will be removed in a future
+# version. This option will be removed on or after 2024-01-20.
+# ****************
+# If false, makes your Streamlit script not draw to a Streamlit app.
+# Default: true
+displayEnabled = true
+
+# Controls whether uncaught app exceptions and deprecation warnings
+# are displayed in the browser. By default, this is set to True and
+# Streamlit displays app exceptions and associated tracebacks, and
+# deprecation warnings, in the browser.
+#
+# If set to False, deprecation warnings and full exception messages
+# will print to the console only. Exceptions will still display in the
+# browser with a generic error message. For now, the exception type and
+# traceback show in the browser also, but they will be removed in the
+# future.
+# Default: true
+showErrorDetails = true
+
+# Change the visibility of items in the toolbar, options menu,
+# and settings dialog (top right of the app).
+# Allowed values:
+# * "auto"      : Show the developer options if the app is accessed through
+#                 localhost or through Streamlit Community Cloud as a developer.
+#                 Hide them otherwise.
+# * "developer" : Show the developer options.
+# * "viewer"    : Hide the developer options.
+# * "minimal"   : Show only options set externally (e.g. through
+#                 Streamlit Community Cloud) or through st.set_page_config.
+#                 If there are no options left, hide the menu.
+# Default: "auto"
+toolbarMode = "auto"
+
+[theme]
+
+# The preset Streamlit theme that your custom theme inherits from.
+# One of "light" or "dark".
+base = "dark"
+
+# Primary accent color for interactive elements.
+# primaryColor =
+
+# Background color for the main content area.
+# backgroundColor =
+
+# Background color used for the sidebar and most interactive widgets.
+# secondaryBackgroundColor =
+
+# Color used for almost all text.
+# textColor =
+
+# Font family for all text in the app, except code blocks. One of "sans serif",
+# "serif", or "monospace".
+# font =
