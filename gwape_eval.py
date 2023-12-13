@@ -34,6 +34,14 @@ CHOICES_TEST_7 = {
 #             </style>
 #             """
 # st.markdown(hide_st_style, unsafe_allow_html=True)
+# CONFIG PAGINA
+st.set_page_config(layout="wide")
+
+def inject_custom_css():
+    with open('assets/styles.css') as f:
+        st.markdown(f'<style> {f.read()}</style>', unsafe_allow_html=True)
+
+inject_custom_css()
 
 # APP LAYOUT CONFIG
 st.title("Green Analytical Chemistry")
@@ -41,7 +49,7 @@ st.title("Green Analytical Chemistry")
 colL, colR = st.columns([3, 1])
 colL.markdown("Evaluating the __greenness__ of analytical methods")
 colR.markdown(
-    "Sponsored by ALABE - Association of Enology Laboratories https://www.alabe.pt",
+    ' <i class="fa-solid fa-link"></i><a style="color: #5C6BC0; text-decoration: none;" href="https://www.alabe.pt" target="_blank">Sponsored by ALABE - Association of Enology Laboratories</a>', unsafe_allow_html = True
 )
 
 colL.write(
