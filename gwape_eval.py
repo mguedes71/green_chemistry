@@ -117,7 +117,7 @@ centers = {
     9: (202, 280),
 }
 
-score_to_color = {
+score_to_color_rgb = {
     5: (0, 128, 0),
     4: (0, 204, 73),
     3: (0, 255, 210),
@@ -125,6 +125,13 @@ score_to_color = {
     1: (0, 51, 190),
 }
 
+score_to_color_bgr = {
+    5: (0, 128, 0),
+    4: (73, 204, 0),
+    3: (210, 255, 0),
+    2: (210, 156, 0),
+    1: (190, 51, 0),
+}
 
 def draw_berry(img, center, radius, color, thickness=5, border_color=(0, 0, 0)):
     cv.circle(img, center, radius, border_color, thickness=thickness)
@@ -246,14 +253,14 @@ def compute_scores():
 
     # Compute scores
     GRAPE_scores = parse_GRAPE_metrics()
-    # st.write(GRAPE_scores)
+    #st.write(GRAPE_scores)
 
     # 1. Initialize image
     img = 255 * np.ones((size, size, 3), dtype=np.uint8)
 
     # 2. Draw berries
     for i in range(10):
-        color = score_to_color[GRAPE_scores[i]]
+        color = score_to_color_bgr[GRAPE_scores[i]]
         img = draw_berry(img, centers[i], 30, color)
 
     # Save result
