@@ -2,7 +2,6 @@ import streamlit as st
 import numpy as np
 import cv2 as cv
 
-
 CHOICES_TEST_1 = {
     5: "In-line/In-situ",
     4: "online/in situ",
