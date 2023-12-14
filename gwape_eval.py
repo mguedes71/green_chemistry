@@ -48,7 +48,7 @@ st.title("Green Analytical Chemistry")
 colL, colR = st.columns([3, 1])
 colL.markdown("Evaluating the __greenness__ of analytical methods")
 colR.markdown(
-    ' <i class="fa-solid fa-link"></i><a style="color: #5C6BC0; text-decoration: none;" href="https://www.alabe.pt" target="_blank">Sponsored by ALABE - Association of Enology Laboratories</a>', unsafe_allow_html = True
+    ' <i class="fa-solid fa-link"></i>&nbsp;<a style="color: #5C6BC0; text-decoration: none;" href="https://www.alabe.pt" target="_blank">Sponsored by ALABE - Association of Enology Laboratories</a>', unsafe_allow_html = True
 )
 
 colL.write(
