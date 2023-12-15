@@ -24,22 +24,25 @@ CHOICES_TEST_7 = {
     1: "More than 3 hazardous pictograms with indication warning or at least 1 hazardous pictogram with indication danger",
 }
 
-# APP HIDE MENU
-# hide_st_style = """
-#             <style>
-#             #MainMenu {visibility: hidden;}
-#             footer {visibility: hidden;}
-#             header {visibility: hidden;}
-#             </style>
-#             """
-# st.markdown(hide_st_style, unsafe_allow_html=True)
-
-# CONFIG PAGINA
+# -------------- SETTINGS --------------
 page_title = "Green Analytical Chemistry"
 page_icon = "♻"
 layout = "wide"
+# --------------------------------------
 
 st.set_page_config(page_title=page_title, page_icon=page_icon, layout=layout)
+
+# --- HIDE STREAMLIT STYLE ---
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
+# --- INJECT CUSTUM CSS ---
 
 def inject_custom_css():
     with open('assets/styles.css') as f:
@@ -47,14 +50,15 @@ def inject_custom_css():
 
 inject_custom_css()
 
-# APP LAYOUT CONFIG
+# --- LAYOUT CONFIG ---
+
 st.title("♻" + page_title)
 
-colL, colR = st.columns([3, 1])
+colL, colR = st.columns([4, 1])
 colL.markdown("Evaluating the __greenness__ of analytical methods")
-colR.markdown(
-    ' <i class="fa-solid fa-link"></i>&nbsp;<a style="color: #5C6BC0; text-decoration: none;" href="https://www.alabe.pt" target="_blank">Sponsored by ALABE - Association of Enology Laboratories</a>', unsafe_allow_html = True
-)
+# colR.markdown(
+#     ' <i class="fa-solid fa-link"></i>&nbsp;<a style="color: #5C6BC0; text-decoration: none;" href="https://www.alabe.pt" target="_blank">Sponsored by ALABE - Association of Enology Laboratories</a>', unsafe_allow_html = True
+# )
 
 colL.write(
     """
@@ -66,7 +70,9 @@ colL.write(
 
     """
 )
-# Form
+
+# --- FORM CONFIG ---
+
 form = st.sidebar.form(key="metrics_form")
 form.header("Metrics:")
 # Test 1: Promotion of in-situ measurements

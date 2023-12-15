@@ -91,17 +91,17 @@ toolbarMode = "auto"
 base = "dark"
 
 # Primary accent color for interactive elements.
-# primaryColor =
+primaryColor = "#d33682"
 
 # Background color for the main content area.
-# backgroundColor =
+backgroundColor = "#002b36"
 
 # Background color used for the sidebar and most interactive widgets.
-# secondaryBackgroundColor =
+secondaryBackgroundColor = "#586e75"
 
 # Color used for almost all text.
-# textColor =
+textColor = "#fafafa"
 
-# Font family for all text in the app, except code blocks. One of "sans serif",
-# "serif", or "monospace".
-# font =
+# Font family for all text in the app, except code blocks. One of "sans serif", "serif", or "monospace".
+# Default: "sans serif"
+font = "sans serif"
