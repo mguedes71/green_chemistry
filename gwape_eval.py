@@ -33,8 +33,13 @@ CHOICES_TEST_7 = {
 #             </style>
 #             """
 # st.markdown(hide_st_style, unsafe_allow_html=True)
+
 # CONFIG PAGINA
-st.set_page_config(layout="wide")
+page_title = "Green Analytical Chemistry"
+page_icon = "♻"
+layout = "wide"
+
+st.set_page_config(page_title=page_title, page_icon=page_icon, layout=layout)
 
 def inject_custom_css():
     with open('assets/styles.css') as f:
@@ -43,7 +48,7 @@ def inject_custom_css():
 inject_custom_css()
 
 # APP LAYOUT CONFIG
-st.title("Green Analytical Chemistry")
+st.title("♻" + page_title)
 
 colL, colR = st.columns([3, 1])
 colL.markdown("Evaluating the __greenness__ of analytical methods")
