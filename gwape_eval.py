@@ -2,6 +2,13 @@ import streamlit as st
 import numpy as np
 import cv2 as cv
 
+# Guarda log numa sheet do google
+from streamlit_gsheets import GSheetsConnection
+import pandas as pd
+from datetime import datetime
+from pytz import timezone
+
+
 CHOICES_TEST_1 = {
     5: "In-line/In-situ",
     4: "online/in situ",
@@ -23,95 +30,6 @@ CHOICES_TEST_7 = {
     2: "2 hazardous pictograms with indication warning",
     1: "More than 3 hazardous pictograms with indication warning or at least 1 hazardous pictogram with indication danger",
 }
-
-# -------------- SETTINGS --------------
-page_title = "Green Analytical Chemistry"
-page_icon = "♻"
-layout = "wide"
-# --------------------------------------
-
-st.set_page_config(page_title=page_title, page_icon=page_icon, layout=layout)
-
-# --- HIDE STREAMLIT STYLE ---
-hide_st_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_st_style, unsafe_allow_html=True)
-
-# --- INJECT CUSTUM CSS ---
-
-def inject_custom_css():
-    with open('assets/styles.css') as f:
-        st.markdown(f'<style> {f.read()}</style>', unsafe_allow_html=True)
-
-inject_custom_css()
-
-# --- LAYOUT CONFIG ---
-
-st.title("♻" + page_title)
-
-colL, colR = st.columns([4, 1])
-colL.markdown("Evaluating the __greenness__ of analytical methods")
-# colR.markdown(
-#     ' <i class="fa-solid fa-link"></i>&nbsp;<a style="color: #5C6BC0; text-decoration: none;" href="https://www.alabe.pt" target="_blank">Sponsored by ALABE - Association of Enology Laboratories</a>', unsafe_allow_html = True
-# )
-
-colL.write(
-    """
-    ---
-
-    Instructions: Enter the metrics in the form sidebar and click __Evaluate__
-
-    ---
-
-    """
-)
-
-# --- FORM CONFIG ---
-
-form = st.sidebar.form(key="metrics_form")
-form.header("Metrics:")
-# Test 1: Promotion of in-situ measurements
-type_of_measurements = form.selectbox(
-    "Type of measurements:",
-    CHOICES_TEST_1.keys(),
-    format_func=lambda x: CHOICES_TEST_1[x],
-)
-# Test 2: Integration of analytical processes and operations
-number_of_unitary_steps = form.number_input("Number of unitary steps:", 1, None, 1)
-# Test 3: Selection of automated and miniaturized methods
-degree_of_automatization_and_miniaturization = form.selectbox(
-    "Degree of automatization and miniaturization:",
-    CHOICES_TEST_3.keys(),
-    format_func=lambda x: CHOICES_TEST_3[x],
-)
-# Test 4: Choice of multi-analyte or multi-parameter methods
-number_of_parameters_under_analysis = form.number_input(
-    "Number of parameters under analysis:", 1, None, 1
-)
-# Test 5: Choose methods with a high sample throughput
-sample_throughput = form.number_input("Sample throughput:", 1, None, 130)
-# Test 6: Minimization of the waste of energy
-energy_consumption = form.number_input("Energy consumption:", 0.0, None, 0.01, 0.01)
-# Test 7: Use of safer reagents
-hazard_classification_of_reagents = form.selectbox(
-    "Hazard classification of reagents:",
-    CHOICES_TEST_7.keys(),
-    format_func=lambda x: CHOICES_TEST_7[x],
-)
-# Test 8: Minimization of sample size
-sample_volume = form.number_input("Sample volume:", 0.0, None, 0.3, 0.1)
-# Test 9: Minimize Waste
-consumable_material_waste = form.radio("Consumable material waste:", ("Yes", "No"))
-liquid_waste = form.number_input("Liquid waste:", 0, None, 12, 1)
-# Test 10: Calibration
-calibration = form.radio("Calibration:", ("Yes", "No"))
-calibration_waste = form.number_input("Calibration waste:", 0, None, 0)
-
 
 # from PIL import Image, ImageFilter
 
@@ -143,6 +61,65 @@ score_to_color_bgr = {
     2: (210, 156, 0),
     1: (190, 51, 0),
 }
+
+
+# -------------- SETTINGS --------------
+page_title = "Green Analytical Chemistry"
+page_icon = "♻"
+layout = "wide"
+# --------------------------------------
+
+st.set_page_config(page_title=page_title, page_icon=page_icon, layout=layout)
+
+# --- HIDE STREAMLIT STYLE ---
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
+# --- INJECT CUSTUM CSS ---
+
+
+def inject_custom_css():
+    with open("assets/styles.css") as f:
+        st.markdown(f"<style> {f.read()}</style>", unsafe_allow_html=True)
+
+
+inject_custom_css()
+
+# --- LAYOUT CONFIG ---
+
+st.title("♻" + page_title)
+
+colL, colR = st.columns([4, 1])
+colL.markdown("Evaluating the __greenness__ of analytical methods")
+# colR.markdown(
+#     ' <i class="fa-solid fa-link"></i>&nbsp;<a style="color: #5C6BC0; text-decoration: none;" href="https://www.alabe.pt" target="_blank">Sponsored by ALABE - Association of Enology Laboratories</a>', unsafe_allow_html = True
+# )
+
+colL.write(
+    """
+    ---
+
+    Instructions: Enter the metrics in the form sidebar and click __Evaluate__
+
+    ---
+
+    """
+)
+
+# Establishing a Google Sheets connection
+conn = st.connection("gsheets", type=GSheetsConnection)
+
+# Fetch existing info
+existing_data = conn.read(worksheet="Log", usecols=list(range(13)), ttl=5)
+existing_data = existing_data.dropna(how="all")
+# st.dataframe(existing_data)
+
 
 def draw_berry(img, center, radius, color, thickness=5, border_color=(0, 0, 0)):
     cv.circle(img, center, radius, border_color, thickness=thickness)
@@ -264,7 +241,7 @@ def compute_scores():
 
     # Compute scores
     GRAPE_scores = parse_GRAPE_metrics()
-    #st.write(GRAPE_scores)
+    # st.write(GRAPE_scores)
 
     # 1. Initialize image
     img = 255 * np.ones((size, size, 3), dtype=np.uint8)
@@ -281,11 +258,87 @@ def compute_scores():
     colL.success("Analysis completed successfully")
     colL.image(img, "(Right click on the image and choose Save Image As...)")
 
+    # Create a new row of vendor data
+    data_e_hora_atuais = datetime.now()
+    fuso_horario = timezone("Europe/Lisbon")
+    data_e_hora_lisboa = data_e_hora_atuais.astimezone(fuso_horario)
+    data_e_hora_lisboa_str = data_e_hora_lisboa.strftime("%d/%m/%Y %H:%M:%S")
 
-def main():
+    new_data = pd.DataFrame(
+        [
+            {
+                "DataTime": data_e_hora_lisboa_str,
+                "Type of measurements": CHOICES_TEST_1[type_of_measurements],
+                "Number of unitary steps": number_of_unitary_steps,
+                "Degree of automatization and miniaturization": CHOICES_TEST_3[
+                    degree_of_automatization_and_miniaturization
+                ],
+                "Number of parameters under analysis": number_of_parameters_under_analysis,
+                "Sample throughput": sample_throughput,
+                "Energy consumption": energy_consumption,
+                "Hazard classification of reagents": CHOICES_TEST_7[
+                    hazard_classification_of_reagents
+                ],
+                "Sample volume": sample_volume,
+                "Consumable material waste": consumable_material_waste,
+                "Liquide waste": liquid_waste,
+                "Calibration": calibration,
+                "Calibration waste": calibration_waste,
+            }
+        ]
+    )
+    # Add the new vendor data to the existing data
+    updated_df = pd.concat([existing_data, new_data], ignore_index=True)
+    # Update Google Sheets with the new vendor data
+    conn.update(worksheet="Log", data=updated_df)
+
+
+# --- FORM CONFIG ---
+with st.sidebar.form(key="metrics_form"):
+    st.header("Metrics:")
+    # Test 1: Promotion of in-situ measurements
+    type_of_measurements = st.selectbox(
+        "Type of measurements:",
+        CHOICES_TEST_1.keys(),
+        format_func=lambda x: CHOICES_TEST_1[x],
+    )
+    # Test 2: Integration of analytical processes and operations
+    number_of_unitary_steps = st.number_input("Number of unitary steps:", 1, None, 1)
+    # Test 3: Selection of automated and miniaturized methods
+    degree_of_automatization_and_miniaturization = st.selectbox(
+        "Degree of automatization and miniaturization:",
+        CHOICES_TEST_3.keys(),
+        format_func=lambda x: CHOICES_TEST_3[x],
+    )
+    # Test 4: Choice of multi-analyte or multi-parameter methods
+    number_of_parameters_under_analysis = st.number_input(
+        "Number of parameters under analysis:", 1, None, 1
+    )
+    # Test 5: Choose methods with a high sample throughput
+    sample_throughput = st.number_input("Sample throughput:", 1, None, 130)
+    # Test 6: Minimization of the waste of energy
+    energy_consumption = st.number_input("Energy consumption:", 0.0, None, 0.01, 0.01)
+    # Test 7: Use of safer reagents
+    hazard_classification_of_reagents = st.selectbox(
+        "Hazard classification of reagents:",
+        CHOICES_TEST_7.keys(),
+        format_func=lambda x: CHOICES_TEST_7[x],
+    )
+    # Test 8: Minimization of sample size
+    sample_volume = st.number_input("Sample volume:", 0.0, None, 0.3, 0.1)
+    # Test 9: Minimize Waste
+    consumable_material_waste = st.radio("Consumable material waste:", ("Yes", "No"))
+    liquid_waste = st.number_input("Liquid waste:", 0, None, 12, 1)
+    # Test 10: Calibration
+    calibration = st.radio("Calibration:", ("Yes", "No"))
+    calibration_waste = st.number_input("Calibration waste:", 0, None, 0)
     # submit button
-    form.form_submit_button("Evaluate", on_click=compute_scores)
+    submit_button = st.form_submit_button(label="Evaluate")
 
+    # If the submit button is pressed
+    if submit_button:
+        compute_scores()
 
-if __name__ == "__main__":
-    main()
+# def main():
+# if __name__ == "__main__":
+#     main()
