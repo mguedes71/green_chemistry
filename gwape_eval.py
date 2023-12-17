@@ -116,7 +116,7 @@ colL.write(
 conn = st.connection("gsheets", type=GSheetsConnection)
 
 # Fetch existing info
-existing_data = conn.read(worksheet="Log", usecols=list(range(13)), ttl=5)
+existing_data = conn.read(worksheet="Log", usecols=list(range(14)), ttl=5)
 existing_data = existing_data.dropna(how="all")
 # st.dataframe(existing_data)
 
@@ -284,6 +284,7 @@ def compute_scores():
                 "Liquide waste": liquid_waste,
                 "Calibration": calibration,
                 "Calibration waste": calibration_waste,
+                "GRAPE scores": GRAPE_scores,
             }
         ]
     )
