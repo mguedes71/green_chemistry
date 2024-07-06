@@ -1,7 +1,7 @@
 streamlit
 st-gsheets-connection
-numpy < 2
+numpy<2
 opencv-python-headless
-pandas >= 2.1.2
+pandas
 datetime
 pytz
