@@ -64,28 +64,28 @@ score_to_color_bgr = {
 
 
 # -------------- SETTINGS --------------
-page_title = "Green Analytical Chemistry"
-page_icon = "♻"
-layout = "wide"
+PAGE_TITLE = "Green Analytical Chemistry"
+PAGE_ICON = "♻"
+PAGE_LAYOUT = "wide"
 # --------------------------------------
 
-st.set_page_config(page_title=page_title, page_icon=page_icon, layout=layout)
+st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout=PAGE_LAYOUT)
 
 # --- HIDE STREAMLIT STYLE ---
-hide_st_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_st_style, unsafe_allow_html=True)
+# hide_st_style = """
+#             <style>
+#             #MainMenu {visibility: hidden;}
+#             footer {visibility: hidden;}
+#             header {visibility: hidden;}
+#             </style>
+#             """
+# st.markdown(hide_st_style, unsafe_allow_html=True)
 
 # --- INJECT CUSTUM CSS ---
 
 
 def inject_custom_css():
-    with open("assets/styles.css") as f:
+    with open("styles/main.css") as f:
         st.markdown(f"<style> {f.read()}</style>", unsafe_allow_html=True)
 
 
@@ -93,7 +93,7 @@ inject_custom_css()
 
 # --- LAYOUT CONFIG ---
 
-st.title("♻" + page_title)
+st.title("♻" + PAGE_TITLE)
 
 colL, colR = st.columns([4, 1])
 colL.markdown("Evaluating the __greenness__ of analytical methods")
