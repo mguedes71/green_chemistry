@@ -5,6 +5,7 @@ opencv-python-headless
 pandas
 datetime
 pytz
-yaml
+PyYAML
 dataclasses
 typing
+streamlit-authenticator
