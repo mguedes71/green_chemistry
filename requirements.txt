@@ -5,3 +5,6 @@ opencv-python-headless
 pandas
 datetime
 pytz
+yaml
+dataclasses
+typing
