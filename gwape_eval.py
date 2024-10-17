@@ -547,6 +547,7 @@ inject_custom_css()
 
 # --- LAYOUT CONFIG ---
 
+
 st.title("♻" + PAGE_TITLE)
 
 colL, colR = st.columns([4, 1])
@@ -782,7 +783,79 @@ def compute_scores():
 
         # print(f"Succesfully exported image under {img_name}")
         colL.success("Analysis completed successfully")
-        colL.image(image, "(Right click on the image and choose Save Image As...)")
+
+        tab1, tab2 = colL.tabs(["Grape", "Metrics"])
+
+        with tab1:
+            st.image(image, "(Right click on the image and choose Save Image As...)")
+
+        new_data = pd.DataFrame(
+            [
+                {
+                    "Metric": "Type of measurements",
+                    "Value": CHOICES_TEST_1[type_of_measurements],
+                    "Weight": type_of_measurements_w,
+                },
+                {
+                    "Metric": "Number of unitary steps",
+                    "Value": number_of_unitary_steps,
+                    "Weight": number_of_unitary_steps_w,
+                },
+                {
+                    "Metric": "Degree of automatization and miniaturization",
+                    "Value": CHOICES_TEST_3[
+                        degree_of_automatization_and_miniaturization
+                    ],
+                    "Weight": degree_of_automatization_and_miniaturization_w,
+                },
+                {
+                    "Metric": "Number of parameters under analysis",
+                    "Value": number_of_parameters_under_analysis,
+                    "Weight": number_of_parameters_under_analysis_w,
+                },
+                {
+                    "Metric": "Sample throughput",
+                    "Value": sample_throughput,
+                    "Weight": sample_throughput_w,
+                },
+                {
+                    "Metric": "Energy consumption",
+                    "Value": energy_consumption,
+                    "Weight": energy_consumption_w,
+                },
+                {
+                    "Metric": "Hazard classification of reagents",
+                    "Value": CHOICES_TEST_7[hazard_classification_of_reagents],
+                    "Weight": hazard_classification_of_reagents_w,
+                },
+                {
+                    "Metric": "Sample volume",
+                    "Value": sample_volume,
+                    "Weight": sample_volume_w,
+                },
+                {
+                    "Metric": "Consumable material waste",
+                    "Value": consumable_material_waste
+                    + (
+                        f" (Liquid waste: {liquid_waste})"
+                        if consumable_material_waste == "Yes"
+                        else ""
+                    ),
+                    "Weight": consumable_material_waste_w,
+                },
+                {
+                    "Metric": "Calibration waste",
+                    "Value": calibration
+                    + (
+                        f" (Waste: {calibration_waste})" if calibration == "Yes" else ""
+                    ),
+                    "Weight": calibration_w,
+                },
+            ],
+        )
+
+        with tab2:
+            st.dataframe(data=new_data, hide_index=True)
 
         # Create a new row of vendor data
         data_e_hora_atuais = datetime.now()
@@ -814,6 +887,7 @@ def compute_scores():
                 }
             ]
         )
+
         # Add the new vendor data to the existing data
         updated_df = pd.concat([existing_data, new_data], ignore_index=True)
         # Update Google Sheets with the new vendor data
@@ -893,19 +967,38 @@ with st.sidebar.form(key="metrics_form"):
         )
     # Test 9: Minimize Waste
     with st.expander("Consumable material waste"):
-        consumable_material_waste = st.radio("Material waste?", ("Yes", "No"))
-        liquid_waste = st.number_input("Liquid waste:", 0, None, 12, 1, key="value_9")
+        consumable_material_waste = st.radio("Waste?", ("Yes", "No"), key="radio_9")
+        liquid_waste = st.number_input(
+            "Liquid waste:",
+            0,
+            None,
+            12,
+            1,
+            key="value_9",
+        )
         consumable_material_waste_w = st.number_input(
-            "Weight:", min_value=0, max_value=3, step=1, key="weight_9"
+            "Weight:",
+            min_value=0,
+            max_value=3,
+            step=1,
+            key="weight_9",
         )
     # Test 10: Calibration
     with st.expander("Calibration waste"):
-        calibration = st.radio("Calibration?", ("Yes", "No"))
+        calibration = st.radio("Waste?", ("Yes", "No"), key="radio_10")
         calibration_waste = st.number_input(
-            "Calibration waste:", 0, None, 0, key="value_10"
+            "Value:",
+            0,
+            None,
+            0,
+            key="value_10",
         )
         calibration_w = st.number_input(
-            "Weight:", min_value=0, max_value=3, step=1, key="weight_10"
+            "Weight:",
+            min_value=0,
+            max_value=3,
+            step=1,
+            key="weight_10",
         )
     # submit button
     submit_button = st.form_submit_button(label="Evaluate")
