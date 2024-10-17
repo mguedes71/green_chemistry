@@ -85,40 +85,6 @@ CHOICES_TEST_7 = {
 }
 
 
-################################### PARA MANTER?
-# from PIL import Image, ImageFilter
-
-centers = {
-    0: (100, 100),
-    1: (168, 100),
-    2: (236, 100),
-    3: (304, 100),
-    4: (134, 160),
-    5: (202, 160),
-    6: (270, 160),
-    7: (168, 220),
-    8: (236, 220),
-    9: (202, 280),
-}
-
-score_to_color_rgb = {
-    5: (0, 128, 0),
-    4: (0, 204, 73),
-    3: (0, 255, 210),
-    2: (0, 156, 210),
-    1: (0, 51, 190),
-}
-
-score_to_color_bgr = {
-    5: (0, 128, 0),
-    4: (73, 204, 0),
-    3: (210, 255, 0),
-    2: (210, 156, 0),
-    1: (190, 51, 0),
-}
-################################### PARA MANTER?
-
-
 # Geometry functions
 def center_coordinates(index: tuple, R: int, a: float) -> np.array:
     """Compute a berry center given its index. The function computes the index assuming the top-left
