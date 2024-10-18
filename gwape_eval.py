@@ -627,7 +627,7 @@ def parse_GRAPE_metrics() -> dict:
     weight = energy_consumption_w
     weight_sum += weight
 
-    i6 = energy_consumption
+    i6 = round(energy_consumption, 2)
     if i6 <= 0:
         colL.error('"energy_consumption" must be >= 0')
         have_error = True
@@ -654,7 +654,7 @@ def parse_GRAPE_metrics() -> dict:
     weight = sample_volume_w
     weight_sum += weight
 
-    i8 = float(sample_volume)
+    i8 = round(sample_volume, 2)
 
     if i8 < 0:
         colL.error('"sample_volume" must be >= 0')
@@ -792,7 +792,7 @@ def compute_scores():
                 },
                 {
                     "Metric": "Energy consumption",
-                    "Value": energy_consumption,
+                    "Value": round(energy_consumption, 2),
                     "Weight": energy_consumption_w,
                 },
                 {
@@ -802,7 +802,7 @@ def compute_scores():
                 },
                 {
                     "Metric": "Sample volume",
-                    "Value": sample_volume,
+                    "Value": round(sample_volume, 2),
                     "Weight": sample_volume_w,
                 },
                 {
