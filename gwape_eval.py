@@ -13,7 +13,9 @@ import pandas as pd
 from datetime import datetime
 from pytz import timezone
 
-# Supported colors in GRAPE
+# Supported colors in GRAPE RGB
+####### Não esquecer converter em BGR #######
+
 BLACK = (0, 0, 0)
 GREY = (200, 200, 200)
 WHITE = (255, 255, 255)
@@ -652,9 +654,9 @@ def parse_GRAPE_metrics() -> dict:
     weight = sample_volume_w
     weight_sum += weight
 
-    i8 = sample_volume
+    i8 = float(sample_volume)
 
-    if i8 <= 0:
+    if i8 < 0:
         colL.error('"sample_volume" must be >= 0')
         have_error = True
 
@@ -662,7 +664,7 @@ def parse_GRAPE_metrics() -> dict:
         results[key] = (5, weight)
     elif i8 >= 0.1 and i8 <= 1:
         results[key] = (3, weight)
-    elif i8 >= 2 and i8 <= 10:
+    elif i8 > 1 and i8 <= 10:
         results[key] = (2, weight)
     else:
         results[key] = (1, weight)
@@ -725,6 +727,7 @@ def compute_scores():
     # Compute scores
     GRAPE_scores = parse_GRAPE_metrics()
     # st.write(GRAPE_scores)
+    print(GRAPE_scores)
 
     if GRAPE_scores is not None:
         # Create base GRAPE object
@@ -744,6 +747,9 @@ def compute_scores():
         # Draw GRAPE on image
         image = grape.draw(image, translation)
 
+        # Convert the image from RGB to BGR
+        bgr_img = cv.cvtColor(image, cv.COLOR_RGB2BGR)
+
         # cv.imshow("GRAPE analysis", image)
         # cv.waitKey()
 
@@ -753,7 +759,7 @@ def compute_scores():
         tab1, tab2 = colL.tabs(["Grape", "Metrics"])
 
         with tab1:
-            st.image(image, "(Right click on the image and choose Save Image As...)")
+            st.image(bgr_img, "(Right click on the image and choose Save Image As...)")
 
         new_data = pd.DataFrame(
             [
