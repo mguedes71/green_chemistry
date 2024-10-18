@@ -982,3 +982,5 @@ with st.sidebar.form(key="metrics_form"):
 # def main():
 # if __name__ == "__main__":
 #     main()
+# streamlir run .\gwape_eval.py
+###############################
