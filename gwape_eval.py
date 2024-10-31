@@ -907,13 +907,13 @@ with st.sidebar.form(key="metrics_form"):
             "Weight:", min_value=0, max_value=3, step=1, key="weight_4"
         )
     # Test 5: Choose methods with a high sample throughput
-    with st.expander("Sample throughput"):
+    with st.expander("Sample throughput (number of samples per hour)"):
         sample_throughput = st.number_input("Value:", 1, None, 130, key="value_5")
         sample_throughput_w = st.number_input(
             "Weight:", min_value=0, max_value=3, step=1, key="weight_5"
         )
     # Test 6: Minimization of the waste of energy
-    with st.expander("Energy consumption"):
+    with st.expander("Energy consumption (KWh)"):
         energy_consumption = st.number_input(
             "Value:", 0.0, None, 0.01, 0.01, key="value_6"
         )
@@ -932,16 +932,18 @@ with st.sidebar.form(key="metrics_form"):
             "Weight:", min_value=0, max_value=3, step=1, key="weight_7"
         )
     # Test 8: Minimization of sample size
-    with st.expander("Sample volume"):
+    with st.expander("Sample volume (mL)"):
         sample_volume = st.number_input("Value:", 0.0, None, 0.3, 0.1, key="value_8")
         sample_volume_w = st.number_input(
             "Weight:", min_value=0, max_value=3, step=1, key="weight_8"
         )
     # Test 9: Minimize Waste
-    with st.expander("Consumable material waste"):
-        consumable_material_waste = st.radio("Waste?", ("Yes", "No"), key="radio_9")
+    with st.expander("Waste (mL)"):
+        consumable_material_waste = st.radio(
+            "Consumable material waste?", ("Yes", "No"), key="radio_9"
+        )
         liquid_waste = st.number_input(
-            "Liquid waste:",
+            "Waste(mL):",
             0,
             None,
             12,
@@ -956,10 +958,10 @@ with st.sidebar.form(key="metrics_form"):
             key="weight_9",
         )
     # Test 10: Calibration
-    with st.expander("Calibration waste"):
-        calibration = st.radio("Waste?", ("Yes", "No"), key="radio_10")
+    with st.expander("Calibration"):
+        calibration = st.radio("Calibration?", ("Yes", "No"), key="radio_10")
         calibration_waste = st.number_input(
-            "Value:",
+            "Calibration liquid waste (mL):",
             0,
             None,
             0,
