@@ -694,7 +694,7 @@ def parse_GRAPE_metrics() -> dict:
         colL.error('"calibration_waste" must be >= 0')
         have_error = True
 
-    if not calibration:
+    if calibration == None or calibration == "No":
         results[key] = (5, weight)
     else:
         if calibration_waste > 10:
@@ -962,9 +962,9 @@ with st.sidebar.form(key="metrics_form"):
         calibration = st.radio("Calibration?", ("Yes", "No"), key="radio_10")
         calibration_waste = st.number_input(
             "Calibration liquid waste (mL):",
-            0,
-            None,
-            0,
+            min_value=0.0,
+            max_value=None,
+            step=0.01,
             key="value_10",
         )
         calibration_w = st.number_input(
@@ -984,5 +984,5 @@ with st.sidebar.form(key="metrics_form"):
 # def main():
 # if __name__ == "__main__":
 #     main()
-# streamlir run .\gwape_eval.py
+# streamlit run .\gwape_eval.py
 ###############################
