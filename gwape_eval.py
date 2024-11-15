@@ -485,6 +485,14 @@ def retrieve_score(s: str, lookup_table: dict) -> Any:
     raise KeyError(f"Unable to find key {k}. Available are: {lookup_table.keys()}")
 
 
+# Define o estado inicial da variável de exibição
+# Inicializar estados se não existirem
+if "show_calibration_waste" not in st.session_state:
+    st.session_state.show_calibration_waste = False
+
+if "calibration" not in st.session_state:
+    st.session_state.calibration = "No"
+
 # -------------- SETTINGS --------------
 PAGE_TITLE = "Green Analytical Chemistry"
 PAGE_ICON = "♻"
@@ -690,11 +698,13 @@ def parse_GRAPE_metrics() -> dict:
     weight = calibration_w
     weight_sum += weight
 
-    if calibration_waste < 0:
-        colL.error('"calibration_waste" must be >= 0')
-        have_error = True
+    # if calibration_waste < 0:
+    #     colL.error('"calibration_waste" must be >= 0')
+    #     have_error = True
+    calibration = st.session_state.get("radio_10")
+    calibration_waste = st.session_state.get("calibration_waste")
 
-    if calibration == None or calibration == "No":
+    if calibration is None or calibration == "No":
         results[key] = (5, weight)
     else:
         if calibration_waste > 10:
@@ -760,6 +770,9 @@ def compute_scores():
 
         with tab1:
             st.image(bgr_img, "(Right click on the image and choose Save Image As...)")
+
+        calibration = st.session_state.get("radio_10")
+        calibration_waste = st.session_state.get("calibration_waste")
 
         new_data = pd.DataFrame(
             [
@@ -944,10 +957,9 @@ with st.sidebar.form(key="metrics_form"):
         )
         liquid_waste = st.number_input(
             "Waste(mL):",
-            0,
-            None,
-            12,
-            1,
+            min_value=0.0,
+            max_value=None,
+            step=0.01,
             key="value_9",
         )
         consumable_material_waste_w = st.number_input(
@@ -959,14 +971,17 @@ with st.sidebar.form(key="metrics_form"):
         )
     # Test 10: Calibration
     with st.expander("Calibration"):
-        calibration = st.radio("Calibration?", ("Yes", "No"), key="radio_10")
-        calibration_waste = st.number_input(
-            "Calibration liquid waste (mL):",
-            min_value=0.0,
-            max_value=None,
-            step=0.01,
-            key="value_10",
-        )
+        placeholder_calibration_radio = st.empty()
+
+        placeholder_calibration_waste = st.empty()
+
+        # calibration_waste = st.number_input(
+        #     "Calibration liquid waste (mL):",
+        #     min_value=0.0,
+        #     max_value=None,
+        #     step=0.01,
+        #     key="value_10",
+        # )
         calibration_w = st.number_input(
             "Weight:",
             min_value=0,
@@ -974,12 +989,37 @@ with st.sidebar.form(key="metrics_form"):
             step=1,
             key="weight_10",
         )
+
     # submit button
     submit_button = st.form_submit_button(label="Evaluate")
 
     # If the submit button is pressed
     if submit_button:
         compute_scores()
+
+# Configurar o radio button no placeholder
+with placeholder_calibration_radio:
+    st.session_state.calibration = st.radio(
+        "Calibration?",
+        ("No", "Yes"),
+        key="radio_10",
+        on_change=lambda: st.session_state.update(
+            {"show_calibration_waste": st.session_state.radio_10 == "Yes"}
+        ),
+    )
+
+# Configurar o campo de input no placeholder
+with placeholder_calibration_waste:
+    if st.session_state.show_calibration_waste:
+        st.session_state["calibration_waste"] = st.number_input(
+            "Calibration liquid waste (mL):",
+            min_value=0.0,
+            max_value=None,
+            step=0.01,
+            key="value_10",
+        )
+    else:
+        st.session_state["calibration_waste"] = None
 
 # def main():
 # if __name__ == "__main__":
